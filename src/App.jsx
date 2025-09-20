@@ -14,6 +14,7 @@ import ServicesPage from './features/services/pages/ServicesPage'
 import LoginPage from './features/auth/pages/LoginPage'
 import RegisterPage from './features/auth/pages/RegisterPage'
 import DashboardPage from './features/dashboard/DashboardPage'
+import CitasPage from './features/dashboard/pages/citas/CitasPage'
 
 
 function App() {
@@ -83,6 +84,7 @@ function App() {
 
         {/* Dashboard routes without navbar/footer */}
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard/citas" element={<CitasPage />} />
 
 
       </Routes>

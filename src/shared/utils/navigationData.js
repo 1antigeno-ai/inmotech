@@ -49,12 +49,12 @@ import {
         {
           id: 'gestion-clientes',
           title: 'Gestión de Clientes',
-          path: '/citas/clientes'
+          path: '/dashboard/citas/clientes'
         },
         {
           id: 'gestion-citas',
           title: 'Gestión de Citas',
-          path: '/citas/gestion'
+          path: '/dashboard/citas'
         }
       ]
     },
