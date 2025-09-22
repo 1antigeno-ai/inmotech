@@ -131,6 +131,19 @@ const CitasPage = () => {
     });
   };
 
+  // Función para recibir citas desde el frontend público
+  const handlePublicVisitSchedule = (visitData) => {
+    const citaWithId = {
+      ...visitData,
+      id: Date.now(),
+      fechaCreacion: new Date().toISOString().split('T')[0]
+    };
+    setCitas(prev => [...prev, citaWithId]);
+  };
+
+  // En una aplicación real, esto se manejaría a través de un contexto global o estado compartido
+  // Por ahora, las citas del frontend se agregan automáticamente cuando se crean
+
   const handleEditCita = (updatedCita) => {
     setCitas(prev => prev.map(cita => 
       cita.id === updatedCita.id ? updatedCita : cita

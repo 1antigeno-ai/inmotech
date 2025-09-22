@@ -1,6 +1,8 @@
 import React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
+import PropertyVisitModal from "../components/PropertyVisitModal"
+import { useToast } from "@/shared/hooks/use-toast"
 import { Button } from "@/shared/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
@@ -10,6 +12,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui
 
 export default function PropertiesPage() {
   const [activeTab, setActiveTab] = useState("venta")
+  const [isVisitModalOpen, setIsVisitModalOpen] = useState(false)
+  const [selectedProperty, setSelectedProperty] = useState(null)
+  const { toast } = useToast()
   const [filters, setFilters] = useState({
     type: "Todos los tipos",
     location: "Todas las ubicaciones",
@@ -53,6 +58,21 @@ export default function PropertiesPage() {
     
     return matchesTab && matchesType && matchesLocation
   })
+
+  const handleScheduleVisit = (property) => {
+    setSelectedProperty(property)
+    setIsVisitModalOpen(true)
+  }
+
+  const handleVisitSubmit = (visitData) => {
+    console.log('Datos de la visita desde PropertiesPage:', visitData)
+    
+    toast({
+      title: "¡Visita agendada exitosamente!",
+      description: "Te contactaremos pronto para confirmar los detalles.",
+      variant: "default"
+    })
+  }
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -287,9 +307,19 @@ export default function PropertiesPage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button asChild className="w-full bg-[#0c4a7b] hover:bg-[#0a3d68] text-white">
+                  <div className="w-full space-y-2">
+                    <Button asChild className="w-full bg-[#0c4a7b] hover:bg-[#0a3d68] text-white">
                     <Link to={`/inmuebles/${property.id}`}>Ver detalles</Link>
-                  </Button>
+                    </Button>
+                    <Button
+                      onClick={() => handleScheduleVisit(property)}
+                      variant="outline"
+                      className="w-full border-[#0c4a7b] text-[#0c4a7b] hover:bg-[#0c4a7b]/10"
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Agendar Visita
+                    </Button>
+                  </div>
                 </CardFooter>
               </Card>
             ))}
@@ -316,6 +346,14 @@ export default function PropertiesPage() {
           </div>
         </div>
       </section>
+
+      {/* Property Visit Modal */}
+      <PropertyVisitModal
+        isOpen={isVisitModalOpen}
+        onClose={() => setIsVisitModalOpen(false)}
+        property={selectedProperty}
+        onSubmit={handleVisitSubmit}
+      />
     </main>
   )
 }

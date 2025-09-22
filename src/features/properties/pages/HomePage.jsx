@@ -1,6 +1,8 @@
 import "react"
 import { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
+import PropertyVisitModal from "../components/PropertyVisitModal"
+import { useToast } from "@/shared/hooks/use-toast"
 import { Button } from "@/shared/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Badge } from "@/shared/components/ui/badge"
@@ -24,6 +26,9 @@ import {
 
 export default function HomePage() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisitModalOpen, setIsVisitModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const { toast } = useToast();
   const [categoriesVisible, setCategoriesVisible] = useState(false);
   const [servicesVisible, setServicesVisible] = useState(false);
   const [featuredVisible, setFeaturedVisible] = useState(false);
@@ -138,6 +143,22 @@ export default function HomePage() {
       }
     };
   }, []);
+
+  const handleScheduleVisit = (property) => {
+    setSelectedProperty(property);
+    setIsVisitModalOpen(true);
+  };
+
+  const handleVisitSubmit = (visitData) => {
+    // Aquí podrías enviar los datos a tu API
+    console.log('Datos de la visita desde HomePage:', visitData);
+    
+    toast({
+      title: "¡Visita agendada exitosamente!",
+      description: "Te contactaremos pronto para confirmar los detalles.",
+      variant: "default"
+    });
+  };
 
   return (
     <main className="flex min-h-screen flex-col bg-transparent">
@@ -405,6 +426,14 @@ export default function HomePage() {
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                     </Link>
                   </Button>
+                  <Button
+                    onClick={() => handleScheduleVisit(property)}
+                    variant="outline"
+                    className="w-full mt-2 border-[#00457B] text-[#00457B] hover:bg-[#00457B]/10 rounded-full transition-all duration-300"
+                  >
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Agendar Visita
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
@@ -467,6 +496,14 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Property Visit Modal */}
+      <PropertyVisitModal
+        isOpen={isVisitModalOpen}
+        onClose={() => setIsVisitModalOpen(false)}
+        property={selectedProperty}
+        onSubmit={handleVisitSubmit}
+      />
     </main>
   )
 }
